@@ -1,24 +1,61 @@
-import logo from './logo.svg';
-import './App.css';
+//firebase
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "./firebaseConfig";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+//router
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+
+//pages
+import LandingPage from "./pages/LandingPage";
+
+//react
+import { useEffect } from "react";
+import {
+  CssBaseline,
+  StyledEngineProvider,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
+import RootLayout from "./pages/RootLayout";
 
 function App() {
+  initializeApp(firebaseConfig);
+
+  useEffect(() => {
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        //get settings?
+        console.log(user);
+      } else {
+        console.log("no user");
+      }
+    });
+  }, []);
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: "dark",
+    },
+  });
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <RootLayout />,
+      children: [{ index: true, element: <LandingPage /> }],
+    },
+  ]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 }
 

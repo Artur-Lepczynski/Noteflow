@@ -1,0 +1,9 @@
+.wrapper{
+  width: 100%;
+  max-width: 1200px;
+  /* background-color: rgba(255, 0, 0, 0.274); */
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
